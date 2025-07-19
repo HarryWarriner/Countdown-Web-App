@@ -1,0 +1,8 @@
+{
+  "source": {
+    "include": ["web-app"]
+  },
+  "opts": {
+    "destination": "./docs"
+  }
+}

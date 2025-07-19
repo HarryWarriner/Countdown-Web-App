@@ -1,0 +1,27 @@
+{
+  "name": "countdown-web-app",
+  "version": "1.0.0",
+  "description": "A countdown web app which allows for multiplayer countdown",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarryWarriner/Countdown-Web-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HarryWarriner/Countdown-Web-App/issues"
+  },
+  "homepage": "https://github.com/HarryWarriner/Countdown-Web-App#readme",
+  "dependencies": {
+    "ramda": "^0.31.3"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.4",
+    "mocha": "^11.7.1"
+  }
+}
