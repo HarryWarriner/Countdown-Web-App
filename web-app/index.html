@@ -2,6 +2,25 @@
 <html>
   <head>
     <title>Countdown</title>
+    <style>
+  #numbers button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+
+  #goalNumber{
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-style: solid;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 40px;
+  }
+</style>
+
   </head>
   <body>
     <h1>This is Countdown</h1>
@@ -20,10 +39,13 @@
     <button id ="minus">-</button>
     <button id ="multiply">x</button>
     <button id ="divide">/</button>
+    <button id="undo">Undo</button>
+<button id="reset">Reset</button>
+
     <br>
     <hr>
     <span>Your Current Result:</span>
-    <div id="currentResult">100</div>
+    <div id="currentResult"></div>
 
     <hr>
     <button id="newRound">New Round</button>
