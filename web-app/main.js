@@ -4,6 +4,7 @@ import Logic from './logic.js';
 const el = (id) => document.getElementById(id);
 
 // DOM Elements
+const timerDisplay = el("timer");
 const goalNum = el("goalNumber");
 const playNums = el("numbers");
 const newRound = el("newRound");
@@ -21,6 +22,8 @@ const btnUndo = el("undo");
 const btnReset = el("reset");
 
 // Game state
+let timerInterval = null;
+let timeLeft = 30;
 let outputNumbers = [];
 let originalNumbers = [];
 let selectedNumbers = [];
@@ -58,7 +61,28 @@ newRound.onclick = () => {
     console.log(goalValue);
 
     renderNumbers();
+    startTimer();
 };
+
+function startTimer() {
+    clearInterval(timerInterval); // clear old timer if any
+    timeLeft = 30;
+    timerDisplay.textContent = timeLeft;
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = "0";
+            errorMsg.innerHTML = "Time's up!";
+            submitScore();
+            
+        }
+    }, 1000);
+}
+
 
 // Submit button
 submitBtn.onclick =() => {
@@ -101,6 +125,9 @@ function renderNumbers() {
     playNums.innerHTML = '';
     buttonIndexMap = [];
 
+    let closestNum = null;
+    let minDiff = Infinity;
+
     outputNumbers.forEach((num, idx) => {
         if (num !== null) {
             const btn = document.createElement('button');
@@ -111,9 +138,21 @@ function renderNumbers() {
             btn.dataset.visibleIndex = visibleIndex;
             btn.onclick = () => handleNumberClick(visibleIndex);
             playNums.appendChild(btn);
+
+            // Update closest number
+            const diff = Math.abs(num - goalValue);
+            if (diff < minDiff) {
+                closestNum = num;
+                minDiff = diff;
+            }
         }
     });
+
+    // Always show the closest number
+    currentResult = closestNum;
+    currentResultDisplay.textContent = `${closestNum} (closest)`;
 }
+
 
 // When number button is clicked
 function handleNumberClick(visibleIndex) {
@@ -123,13 +162,7 @@ function handleNumberClick(visibleIndex) {
     if (selectedNumbers.includes(realIndex)) {
         selectedNumbers = selectedNumbers.filter(i => i !== realIndex);
         highlightSelection();
-        if (selectedNumbers.length === 0) {
-            currentResult = null;
-            currentResultDisplay.textContent = '';
-        } else if (selectedNumbers.length === 1) {
-            currentResult = outputNumbers[selectedNumbers[0]];
-            currentResultDisplay.textContent = currentResult;
-        }
+       
         return;
     }
 
@@ -137,10 +170,7 @@ function handleNumberClick(visibleIndex) {
         selectedNumbers.push(realIndex);
         highlightSelection();
 
-        if (selectedNumbers.length === 1) {
-            currentResult = outputNumbers[realIndex];
-            currentResultDisplay.textContent = currentResult;
-        }
+     
     }
 
     if (selectedNumbers.length === 2 && selectedOperator) {
@@ -224,6 +254,7 @@ function submitScore() {
     } else {
         scoreDisplay.innerHTML = `Too far! No points<br>Score: ${playerScore}`;
     }
+    canSubmit = false;
     console.log("HI")
     const  method = Logic.Solver(originalNumbers, goalValue);
     solveExp.innerHTML = `How To: ${method}`;
