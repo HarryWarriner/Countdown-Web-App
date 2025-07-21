@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/HarryWarriner/Countdown-Web-App#readme",
   "dependencies": {
+    "chai": "^5.2.1",
     "ramda": "^0.31.3"
   },
   "devDependencies": {
