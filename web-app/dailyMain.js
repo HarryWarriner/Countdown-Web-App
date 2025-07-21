@@ -48,12 +48,11 @@ console.log("Today:", date);
 
 // Start new round
 newRound.onclick = () => {
-    const numBig = Math.floor(Math.random() * 4)
     console.log("numBig");
-    outputNumbers = data[date].outputNumbers[round];
+    outputNumbers = data[date].outputNumbersArray[round];
 
     originalNumbers = [...outputNumbers];
-    goalValue = data[date].goalValue[round];
+    goalValue = data[date].goalValueArray[round];
     console.log("Output Numbers:", originalNumbers);
     console.log("Goal Number:", goalValue);
     historyStack = [];
