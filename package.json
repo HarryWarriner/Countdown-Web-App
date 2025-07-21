@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A countdown web app which allows for multiplayer countdown",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,4 +26,6 @@
     "jsdoc": "^4.0.4",
     "mocha": "^11.7.1"
   }
+
+
 }

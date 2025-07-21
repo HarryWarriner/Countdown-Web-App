@@ -1,5 +1,8 @@
 # Logic.js
 
+## Daily Challenge
+Based on the date, looks into a json file and takes the current data necessary.
+
 ## Solver
 
 ### V2:
@@ -11,7 +14,9 @@
   - Non-commutative: Subtraction (`-`), Division (`/`)
 - Tracks and returns the **closest expression** to the target value.
 
-Memorisation significantly improves the efficetcny. It still uses brute-force recursion.
+Memorisation significantly improves the efficetcny. It still uses brute-force recursion. <br>
+
+However, it means outputs can look like this: ((3 + 7) * ((2 - 10) + (50 - 8))) = 500, when it should just be 50 * 10 = 500
 
 
 ### V1:
