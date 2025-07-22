@@ -1,11 +1,11 @@
 const Logic = require('../logic.js');
 const fs = require('fs');
 
-const path = 'test.json';
+const path = 'dailyGames.json';
 
 // Number of games per day
 let numGames = 10;
-let numIterations = 5;
+let numIterations = 10;
 
 
 // Load existing data 
