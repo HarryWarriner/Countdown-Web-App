@@ -28,7 +28,7 @@ const btnReset = el("reset");
 
 // Game state
 let timerInterval = null;
-let timeLeft = 30;
+let timeLeft = 60;
 let outputNumbers = [];
 let originalNumbers = [];
 let selectedNumbers = [];
@@ -78,7 +78,7 @@ newRound.onclick = () => {
 
 function startTimer() {
     clearInterval(timerInterval); // clear old timer if any
-    timeLeft = 30;
+    timeLeft = 60;
     timerDisplay.textContent = timeLeft;
 
     timerInterval = setInterval(() => {
