@@ -88,7 +88,7 @@ function startTimer() {
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             timerDisplay.textContent = "0";
-            errorMsg.innerHTML = "Time's up!";
+            // errorMsg.innerHTML = "Time's up!";
             submitScore();
             
         }
@@ -251,7 +251,7 @@ function submitScore() {
     if (!canSubmit || hasScored) return;
 
     if (currentResult === null) {
-        scoreDisplay.innerHTML = `Please select a number.`;
+        errorMsg.innerHTML = `Please select a number.`;
         return;
     }
 
@@ -260,11 +260,13 @@ function submitScore() {
         playerScore += scoreEarned;
 
         const msg = scoreEarned === 10
-            ? `Exact! +10 points<br>Score: ${playerScore}`
-            : `Close! +7 points<br>Score: ${playerScore}`;
-        scoreDisplay.innerHTML = msg;
+            ? `Exact! +10 points`
+            : `Close! +7 points`;
+        errorMsg.innerHTML = msg;
+        scoreDisplay.innerHTML = `Score: ${playerScore}`;
     } else {
-        scoreDisplay.innerHTML = `Too far! No points<br>Score: ${playerScore}`;
+        errorMsg.innerHTML = `Too far! No points`;
+        scoreDisplay.innerHTML = `Score: ${playerScore}`;
     }
     canSubmit = false;
     console.log("HI")

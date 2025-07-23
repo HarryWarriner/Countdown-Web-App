@@ -8,116 +8,6 @@
 
 @import "https://fonts.googleapis.com/css?family=Oranienbaum&subset=cyrillic,cyrillic-ext,latin-ext";
 
-/* ==========================================================================
-
-	Base styles: opinionated defaults
-
-========================================================================== */
-
-.wow {
-  visibility: hidden;
-}
-
-.animate__animated {
-  visibility: visible !important;
-}
-
-
-
-html,
-body {
-  width: 100%;
-  overflow-x: hidden;
-}
-
-html {
-  font-size: 100%;
-}
-
-body {
-  background-color: #fff;
-  color: #848484;
-  font-size: 14px;
-  line-height: 27px;
-  overflow-x: none;
-  font-family: "Source Sans Pro", sans-serif;
-  font-style: normal;
-  font-weight: 300;
-}
-
-a,
-input,
-textarea,
-button,
-body,
-img {
-  transition-delay: 0s;
-  transition-duration: 0.6s;
-  transition-property: all;
-  transition-timing-function: ease;
-}
-
-a {
-  text-decoration: none;
-  outline: none;
-  color: #222222;
-}
-
-a:hover {
-  text-decoration: none;
-  color: #222222;
-}
-
-a:focus,
-img:focus,
-button:focus,
-.btn:focus {
-  outline: none;
-  text-decoration: none;
-}
-
-/* Typography
-------------------------------------- */
-
-h1,
-h2,
-h3,
-h4 {
-  font-weight: 400;
-  letter-spacing: 0.3rem;
-  text-transform: uppercase;
-}
-
-h1 {
-  color: #000;
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-h2 {
-  color: #ffffff;
-  font-size: 1rem;
-}
-
-h3 {
-  color: #444;
-  font-size: 14px;
-  letter-spacing: 4px;
-}
-
-h5 {
-  font-weight: 400;
-  letter-spacing: 1px;
-}
-
-p {
-  color: #777;
-  font-size: 16px;
-  line-height: 28px;
-  word-spacing: 1px;
-  letter-spacing: 1px;
-}
-
 /* navigation styles
 /* ========================================== */
  /* Navbar Styles */
@@ -159,6 +49,8 @@ border:none;
 :root {
   --underline-height: 0.5em;
   --transition-duration: 0.5s;
+  --button-color:#38DC8D;
+  --numbers-color:#37BDDB;
 }
 
 nav {
@@ -170,288 +62,81 @@ nav {
   box-shadow: 0 1em 2em rgba(0, 0, 0, 0.05);
 }
 
-.underline {
-  display: block;
-  position: absolute;
-  z-index: 0;
-  bottom: 0;
-  left: 0;
-  height: var(--underline-height);
-  width: 25%;
-  background: black;
-  pointer-events: none;
-  mix-blend-mode: multiply;
-  transition: transform var(--transition-duration) ease-in-out;
-}
-.underline:nth-child(1) {
-  background: yellow;
-  transition: calc(var(--transition-duration) * 0.8);
-}
-.underline:nth-child(2) {
-  background: cyan;
-  transition: calc(var(--transition-duration) * 1.2);
-}
-.underline:nth-child(3) {
-  background: magenta;
+/* Containers
+/* ========================================== */
+
+.custom-box {
+  width:80%;
+  padding: 30px; 
+  margin-top: 30px;
+  margin-bottom: 30px;
+  background-color: #343a40; 
+  color: white; 
+  text-align: center;
 }
 
-a {
-  display: inline-block;
-  z-index: 10;
-  width: 25%;
-  padding: 1em 0;
-  text-align: center;
+#goalNumber {
+  display: inline-block;  
+  margin: 10px auto;       
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid white; 
+  border-radius: 4px;      
+}
+
+
+/* Buttons
+/* ========================================== */
+
+
+ #numbers button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: var(--numbers-color);
+    transition: background-color 0.3s;
+  }
+#numbers button:hover {
+  background-color: #5671DB; 
+}
+
+
+  .Operations button{
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 20px;
+    color:black;
+    background-color: var(--button-color);
+  }
+  .Operations button:hover {
+  background-color: #60DB56; 
+}
+
+  .UndoAndReset button{
+    margin: 5px;
+    padding: 5px 20px;
+    font-size: 14px;
+    color:black;
+    background-color: var(--button-color);
+    min-width: 100px;
+  }
+
+  .UndoAndReset button:hover {
+  background-color: #60DB56; 
+}
+  .NextAndSkip{
+  padding: 10px 20px;
+  font-size: 16px;
+  color: black;
+  background-color: #569BDB;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 120px;
+  
 }
 
-nav.retro .underline {
-  border-radius: 100% 100% 0 0;
+.NextAndSkip:hover {
+  background-color: #5671DB; 
 }
-nav.retro .underline:nth-child(1) {
-  background: gold;
-}
-nav.retro .underline:nth-child(2) {
-  background: dodgerblue;
-}
-nav.retro .underline:nth-child(3) {
-  background: tomato;
-}
-/* header section styles
-/* ========================================== */
-#header {
-  -webkit-background-size: cover;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-
-  text-align: center;
-  padding-top: 130px;
-  padding-bottom: 100px;
-}
-
-#header .header-thumb {
-  background: rgba(255, 255, 255, 0.85);
-
-  border: 10px solid #dfdfdf ; 
-  padding: 62px 20px 62px 20px;
-  display: inline-block;
-}
-
-.header-one .header-thumb {
-  padding: 32px 20px 32px 20px !important;
-}
-
-
-.header-one {
-  background: url("../images/portfolio back.png") no-repeat;
-  height: 60vh !important;
-  min-height: 520px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.header-one {
-  background-position: center -300px !important; /* Moves the image slightly upwards */
-}
-@media (max-width: 768px) {
-  .header-one {
-    height: 70vh !important; /* Adjust for smaller screens */
-    background-attachment: scroll; /* Disables parallax for mobile */
-    background-position: center 0px !important; /* Moves the image slightly upwards */
-  }
-
-  #header .header-thumb {
-    padding: 40px 15px;
-  }
-
-/* ==========================================================================
-
-	Main Wrapper
-
-========================================================================== */
-
-.main-wrapper,
-.main-wrapper-inner {
-  background-color: #fff;
-  position: relative;
-  z-index: 6;
-}
-
-.wrapper {
-  background-color: #fff;
-  padding: 0 25px;
-  position: relative;
-  z-index: 6;
-  margin-bottom: 396px;
-}
-
-/* ==========================================================================
-
-	Portfolio
-
-========================================================================== */
-
-/* ==========================================================================
-
-	Details Gallery
-
-========================================================================== */
-
-.details-content,
-.about-content,
-.contact-wrapper {
-  overflow: hidden;
-}
-
-.details-left header h3,
-.about-content h3 {
-  color: #343434;
-  margin-top: 0;
-}
-
-.details-left header h4,
-.details-left header h5 {
-  font-size: 13px;
-  margin-top: 0;
-  font-weight: 400;
-}
-
-.details-left header h4 {
-  font-weight: 600;
-  padding-top: 22px;
-}
-
-.details-content header {
-  margin-bottom: 67px;
-}
-
-.details-content header h2,
-.details-content header h3 {
-  font-size: 10px;
-  font-weight: 400;
-  margin-top: 0;
-}
-
-.details-content header h2 {
-  font-weight: 600;
-}
-
-.details-image {
-  margin-bottom: 80px;
-}
-
-/* footer section styles
-/* ========================================== */
-footer {
-  background: #141414;
-  padding-top: 120px;
-  padding-bottom: 120px;
-  text-align: center;
-  color:white;
-}
-
-/* social icon */
-.social-icon {
-  padding: 0;
-  margin: 0;
-}
-.social-icon li {
-  list-style: none;
-  display: inline-block;
-}
-.social-icon li a {
-  border-radius: 100px;
-  border: 1px solid transparent;
-  color: #909090;
-  font-size: 18px;
-  width: 50px;
-  height: 50px;
-  line-height: 48px;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  transition: all 0.4s ease-in-out;
-  padding: 0px;
-  margin-top: 14px;
-  margin-right: 8px;
-  margin-left: 8px;
-  position: relative;
-  top: 0px;
-}
-.social-icon li a:hover {
-  background: #ffffff;
-}
-
-/* Responsive Mobile styles
-/* ========================================== */
-@media (max-width: 980px) {
-  .intro-inner {
-    top: 30%;
-  }
-
-  #contact .col-md-4 {
-    padding: 62px 20px 42px 32px;
-  }
-
-  #contact .col-md-4 p {
-    font-size: 12px;
-  }
-
-  #contact #map-canvas {
-    margin-bottom: 60px;
-  }
-}
-
-@media (max-width: 768px) {
-  .brand {
-    padding-left: 24px;
-  }
-
-  .header-one,
-  .header-two,
-  .header-three,
-  .header-four,
-  .header-five {
-    min-height: 380px;
-    padding-top: 80px !important;
-  }
-
-  #about .col-md-4,
-  #single-project .col-md-3 {
-    padding-bottom: 32px;
-  }
-}
-
-@media (max-width: 700px) {
-  h1 {
-    font-size: 1.3rem;
-  }
-  h3 {
-    font-size: 13px;
-    letter-spacing: 3px;
-  }
-
-  .filter-wrapper {
-    padding: 0px;
-  }
-
-  #contact {
-    padding-bottom: 4rem;
-  }
-
-  #contact .col-md-4 {
-    padding: 32px 20px 22px 62px;
-  }
-  .contact-submit {
-    width: 70%;
-  }
-}
-
-@media (max-width: 450px) {
-  .intro-inner {
-    top: 50%;
-  }
-}
-

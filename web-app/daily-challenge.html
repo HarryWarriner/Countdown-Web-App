@@ -18,22 +18,7 @@
     />
 
     <style>
-  #numbers button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-
-
-  #goalNumber{
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-style: solid;
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 40px;
-  }
+ 
 </style>
     <script>
       $(function () {
@@ -43,22 +28,41 @@
   </head>
   <body>
     <div id="navbar"></div>
-    <h1>Kibibyte's: Daily Countdown</h1>
-    <h2>Time Left: <span id="timer">60</span>s</h2>
-    <h3><span id="round"></span></h3>
+    <div class="container custom-box">
+    <h1>Kibibyte's:</h1>
+    <h1> Daily Countdown</h1>
+    <br>
+     <div class="row">
+      <div class="col-xs-6 text-left">
+        <h3><span id="round">Round: 0/10</span></h3>
+        <button class="NextAndSkip" id="newRound">Next Round</button>
+      </div>
+      <div class="col-xs-6 text-right">
+        <h3><span id="score">Score: 0</span></h3>
+        <button class="NextAndSkip" id="submit">Skip Timer</button>
+      </div>
+    </div> 
     
+
+    <h2>Time Left: <span id="timer">60</span>s</h2>
+   
+    <h4><div id="errorMsg"></div></h4>
     <br>
     <div id="goalNumber"></div>
     <br>
     <div id="numbers"></div>
-    <div id="errorMsg"></div>
+    
     <hr>
+    <div class="Operations">
     <button id ="plus">+</button>
     <button id ="minus">-</button>
     <button id ="multiply">x</button>
     <button id ="divide">/</button>
+    </div>
+    <div class="UndoAndReset">
     <button id="undo">Undo</button>
-<button id="reset">Reset</button>
+    <button id="reset">Reset</button>
+   </div>
 
     <br>
     <hr>
@@ -66,11 +70,10 @@
     <div id="currentResult"></div>
 
     <hr>
-    <button id="newRound">Next Round</button>
-    <button id="submit">Skip Timer</button>
-    <div id="score"></div>
+   
+    
     <div id="solveExp"></div>
     <script type="module" src="dailyMain.js"></script>
-
+</div>
   </body>
 </html>
