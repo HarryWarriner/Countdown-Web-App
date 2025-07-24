@@ -140,3 +140,7 @@ nav {
 .NextAndSkip:hover {
   background-color: #5671DB; 
 }
+
+.errorMessage{
+  color:rgb(174, 38, 38);
+}

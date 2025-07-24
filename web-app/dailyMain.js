@@ -39,6 +39,7 @@ let goalValue = null;
 let playerScore = 0;
 let hasScored = false;
 let canSubmit = false;
+let canNextRound = true;
 let buttonIndexMap = [];
 let round = 0;
 
@@ -48,6 +49,7 @@ console.log("Today:", date);
 
 // Start new round
 newRound.onclick = () => {
+    if (canNextRound) {
     console.log("numBig");
     outputNumbers = data[date].outputNumbersArray[round];
 
@@ -74,6 +76,8 @@ newRound.onclick = () => {
 
     renderNumbers();
     startTimer();
+    canNextRound = false;
+    }
 };
 
 function startTimer() {
@@ -90,6 +94,7 @@ function startTimer() {
             timerDisplay.textContent = "0";
             // errorMsg.innerHTML = "Time's up!";
             submitScore();
+            canNextRound = true;
             
         }
     }, 1000);
