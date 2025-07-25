@@ -75,13 +75,15 @@ nav {
   text-align: center;
 }
 
-#goalNumber {
-  display: inline-block;  
-  margin: 10px auto;       
+
+.goal-box {
+  display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
-  border: 2px solid white; 
-  border-radius: 4px;      
+  border: 2px solid white;
+  border-radius: 4px;
+  margin: 10px auto;
+  min-width: 120px;
 }
 
 

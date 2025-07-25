@@ -12,7 +12,9 @@ const timerDisplay = el("timer");
 const currentRound = el("round");
 const goalNum = el("goalNumber");
 const playNums = el("numbers");
+const startGame = el("startGameBtn");
 const newRound = el("newRound");
+const newRound2 = el("newRound2");
 const errorMsg = el("errorMsg");
 const solveExp = el("solveExp");
 const scoreDisplay = el("score");
@@ -42,14 +44,28 @@ let canSubmit = false;
 let canNextRound = true;
 let buttonIndexMap = [];
 let round = 0;
+let bestResultSoFar = null;
+let nextTurnModalShow = true;
+
 
 let today = new Date();
 let date = today.toISOString().split('T')[0];
 console.log("Today:", date);
 
+startGame.onclick = () => {
+   nextround()
+};
+
 // Start new round
 newRound.onclick = () => {
-    if (canNextRound) {
+   nextround()
+};
+newRound2.onclick = () => {
+   nextround()
+};
+
+function nextround() {
+ if (canNextRound) {
     console.log("numBig");
     outputNumbers = data[date].outputNumbersArray[round];
 
@@ -59,8 +75,10 @@ newRound.onclick = () => {
     console.log("Goal Number:", goalValue);
     historyStack = [];
     selectedNumbers = [];
+    nextTurnModalShow = true;
     selectedOperator = null;
     currentResult = null;
+    bestResultSoFar = null;
     canSubmit = true;
     hasScored = false;
 
@@ -73,9 +91,11 @@ newRound.onclick = () => {
 
     console.log(originalNumbers);
     console.log(goalValue);
-
+        
     renderNumbers();
     startTimer();
+    $("#timesUpModal").modal("hide");
+    $("#congratsModal").modal("hide");
     canNextRound = false;
     }
 };
@@ -94,7 +114,13 @@ function startTimer() {
             timerDisplay.textContent = "0";
             // errorMsg.innerHTML = "Time's up!";
             submitScore();
+            if (nextTurnModalShow ){
+            setTimeout(() => {
+                document.getElementById("finalScoreDisplay").textContent = playerScore;
+                $("#timesUpModal").modal("show");
+            }, 300);
             canNextRound = true;
+            }
             
         }
     }, 1000);
@@ -132,7 +158,7 @@ btnReset.onclick = () => {
     outputNumbers = [...originalNumbers];
     historyStack = [];
     currentResult = null;
-    currentResultDisplay.textContent = '';
+    // currentResultDisplay.textContent = '';
     resetSelection();
     renderNumbers();
 };
@@ -142,8 +168,8 @@ function renderNumbers() {
     playNums.innerHTML = '';
     buttonIndexMap = [];
 
-    let closestNum = null;
-    let minDiff = Infinity;
+    // let closestNum = null;
+    // let minDiff = Infinity;
 
     outputNumbers.forEach((num, idx) => {
         if (num !== null) {
@@ -156,18 +182,25 @@ function renderNumbers() {
             btn.onclick = () => handleNumberClick(visibleIndex);
             playNums.appendChild(btn);
 
-            // Update closest number
+            // Update bestResultSoFar
             const diff = Math.abs(num - goalValue);
-            if (diff < minDiff) {
-                closestNum = num;
-                minDiff = diff;
+            if (bestResultSoFar === null || Math.abs(bestResultSoFar - goalValue) > diff) {
+                bestResultSoFar = num;
             }
         }
     });
 
-    // Always show the closest number
-    currentResult = closestNum;
-    currentResultDisplay.textContent = `${closestNum} (closest)`;
+    // // Always show the closest number
+    // currentResult = closestNum;
+    // currentResultDisplay.textContent = `${closestNum} (closest)`;
+    // Display the best result so far
+    currentResult = bestResultSoFar;
+    if (bestResultSoFar !== null) {
+        currentResultDisplay.textContent = `${bestResultSoFar} `;
+    } else {
+        currentResultDisplay.textContent = '';
+    }
+    highlightSelection();
 }
 
 
@@ -234,6 +267,35 @@ function performSelectedOperation() {
 
     outputNumbers[firstIdx] = result;
     outputNumbers[secondIdx] = null;
+
+
+
+    const diff = Math.abs(result - goalValue);
+    if (bestResultSoFar === null || Math.abs(bestResultSoFar - goalValue) > diff) {
+        bestResultSoFar = result;
+    }
+
+    // Check for exact match!
+    if (result === goalValue && canSubmit && !hasScored) {
+        playerScore += 10;
+        hasScored = true;
+        canSubmit = false;
+        nextTurnModalShow = false;
+        timeLeft = 0;
+        round += 1;
+        canNextRound = true;
+        document.getElementById("congratsScoreDisplay").textContent = playerScore;
+        $("#congratsModal").modal("show");
+        
+
+        const method = Logic.Solver(originalNumbers, goalValue);
+        solveExp.innerHTML = `How To: ${method}`;
+        return; // don't continue to renderNumbers again
+    }
+
+    // Automatically select the newly created number
+    // selectedNumbers = [firstIdx];
+    // highlightSelection();
 
     // if (!hasScored && canSubmit) {
     //     const scoreEarned = Logic.calculateScore(result, goalValue);
