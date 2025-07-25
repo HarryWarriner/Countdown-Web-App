@@ -14,7 +14,6 @@ const goalNum = el("goalNumber");
 const playNums = el("numbers");
 const startGame = el("startGameBtn");
 const newRound = el("newRound");
-const newRound2 = el("newRound2");
 const errorMsg = el("errorMsg");
 const solveExp = el("solveExp");
 const scoreDisplay = el("score");
@@ -60,43 +59,52 @@ startGame.onclick = () => {
 newRound.onclick = () => {
    nextround()
 };
-newRound2.onclick = () => {
-   nextround()
-};
+
 
 function nextround() {
- if (canNextRound) {
-    console.log("numBig");
-    outputNumbers = data[date].outputNumbersArray[round];
+    if (round >= 10) {
+            showEndRoundModal({
+            title: "Game Over!",
+            message: "Thanks for playing. Here's your final score:",
+            score: playerScore,
+            isGameOver: true
+            });
+        return;
+    }
 
-    originalNumbers = [...outputNumbers];
-    goalValue = data[date].goalValueArray[round];
-    console.log("Output Numbers:", originalNumbers);
-    console.log("Goal Number:", goalValue);
-    historyStack = [];
-    selectedNumbers = [];
-    nextTurnModalShow = true;
-    selectedOperator = null;
-    currentResult = null;
-    bestResultSoFar = null;
-    canSubmit = true;
-    hasScored = false;
+    if (canNextRound) {
+        $("#endRoundModal").modal("hide");
+        console.log("numBig");
+        outputNumbers = data[date].outputNumbersArray[round];
 
-    goalNum.textContent = goalValue;
-    currentRound.innerHTML = `Round: ${round + 1}/10`;
-    solveExp.innerHTML ='';
-    errorMsg.innerHTML = '';
-    currentResultDisplay.textContent = '';
-    scoreDisplay.innerHTML = `Score: ${playerScore}`;
+        originalNumbers = [...outputNumbers];
+        goalValue = data[date].goalValueArray[round];
+        console.log("Output Numbers:", originalNumbers);
+        console.log("Goal Number:", goalValue);
+        historyStack = [];
+        selectedNumbers = [];
+        nextTurnModalShow = true;
+        selectedOperator = null;
+        currentResult = null;
+        bestResultSoFar = null;
+        canSubmit = true;
+        hasScored = false;
 
-    console.log(originalNumbers);
-    console.log(goalValue);
-        
-    renderNumbers();
-    startTimer();
-    $("#timesUpModal").modal("hide");
-    $("#congratsModal").modal("hide");
-    canNextRound = false;
+        goalNum.textContent = goalValue;
+        currentRound.innerHTML = `Round: ${round + 1}/10`;
+        solveExp.innerHTML ='';
+        errorMsg.innerHTML = '';
+        currentResultDisplay.textContent = '';
+        scoreDisplay.innerHTML = `Score: ${playerScore}`;
+
+        console.log(originalNumbers);
+        console.log(goalValue);
+            
+        renderNumbers();
+        startTimer();
+        // $("#timesUpModal").modal("hide");
+        // $("#congratsModal").modal("hide");
+        canNextRound = false;
     }
 };
 
@@ -114,14 +122,17 @@ function startTimer() {
             timerDisplay.textContent = "0";
             // errorMsg.innerHTML = "Time's up!";
             submitScore();
+
             if (nextTurnModalShow ){
-            setTimeout(() => {
-                document.getElementById("finalScoreDisplay").textContent = playerScore;
-                $("#timesUpModal").modal("show");
-            }, 300);
-            canNextRound = true;
+                setTimeout(() => {
+                    showEndRoundModal({
+                        title: "Time's Up!",
+                        message: "You ran out of time.",
+                        score: playerScore
+                    });
+                }, 300);
+                canNextRound = true;
             }
-            
         }
     }, 1000);
 }
@@ -163,6 +174,23 @@ btnReset.onclick = () => {
     renderNumbers();
 };
 
+function showEndRoundModal({ title, message, score, isGameOver = false }) {
+    document.getElementById("endRoundTitle").textContent = title;
+    document.getElementById("endRoundMessage").textContent = message;
+    document.getElementById("endRoundScore").textContent = score;
+
+    const nextBtn = document.getElementById("newRound");
+    if (isGameOver) {
+        nextBtn.style.display = "none";
+    } else {
+        nextBtn.style.display = "inline-block";
+    }
+
+    $("#endRoundModal").modal("show");
+}
+
+
+
 // Render buttons for number pool
 function renderNumbers() {
     playNums.innerHTML = '';
@@ -196,7 +224,7 @@ function renderNumbers() {
     // Display the best result so far
     currentResult = bestResultSoFar;
     if (bestResultSoFar !== null) {
-        currentResultDisplay.textContent = `${bestResultSoFar} `;
+        currentResultDisplay.textContent = `Closest: ${bestResultSoFar} `;
     } else {
         currentResultDisplay.textContent = '';
     }
@@ -284,12 +312,18 @@ function performSelectedOperation() {
         timeLeft = 0;
         round += 1;
         canNextRound = true;
-        document.getElementById("congratsScoreDisplay").textContent = playerScore;
-        $("#congratsModal").modal("show");
+        showEndRoundModal({
+            title: "Congratulations!",
+            message: "You hit the target exactly!",
+            score: playerScore
+        });
+
         
 
         const method = Logic.Solver(originalNumbers, goalValue);
         solveExp.innerHTML = `How To: ${method}`;
+        resetSelection();
+        renderNumbers();
         return; // don't continue to renderNumbers again
     }
 
@@ -340,7 +374,11 @@ function submitScore() {
     const  method = Logic.Solver(originalNumbers, goalValue);
     solveExp.innerHTML = `How To: ${method}`;
     timeLeft = 0;
-    round += 1;
+    // round += 1;
+    if (round < 10) {
+        round += 1;
+    }
+
 
 }
 

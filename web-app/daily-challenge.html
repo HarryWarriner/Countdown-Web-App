@@ -39,7 +39,8 @@
         </div>
     </div>
      </div>
-    <!-- Time's Up Modal -->
+     
+    <!-- Time's Up Modal 
     <div id="timesUpModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content" style="text-align:center; padding: 20px;">
@@ -51,17 +52,32 @@
         </div>
       </div>
     </div>
-    <!-- Congratulations Modal -->
+    Congratulations Modal 
     <div id="congratsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content" style="text-align:center; padding: 20px;">
-          <h2>🎉 Congratulations!</h2>
+          <h2>Congratulations!</h2>
           <p>You hit the target exactly!</p>
           <p>Your current score is: <strong id="congratsScoreDisplay">0</strong></p>
           <button id="newRound2" class="btn btn-success" style="margin-top: 15px;">Next Round</button>
         </div>
       </div>
     </div>
+    -->
+<!-- End-of-Round Modal -->
+<div id="endRoundModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content" style="text-align:center; padding: 20px;">
+      <h2 id="endRoundTitle">End of Round</h2>
+      <p id="endRoundMessage">Your result:</p>
+      <p>Your current score is: <strong id="endRoundScore">0</strong></p>
+      <button id="newRound" class="btn btn-primary" style="margin-top: 15px;">Next Round</button>
+      <hr>
+      <div id="solveExp"></div>
+    </div>
+  </div>
+</div>
+
 
    
     <div class="container custom-box">
@@ -72,7 +88,7 @@
       <div class="col-xs-6 text-left">
         <h3><span id="round">Round: 0/10</span></h3>
 <!-- <button class="NextAndSkip" id="newRound">Next Round</button> -->
- <div id="currentResult" class="goal-box text-center"></div>
+ <div  class="goal-box text-center"><div id="currentResult"></div></div>
         
       </div>
       <div class="col-xs-6 text-right">
@@ -90,7 +106,10 @@
         <!-- <div id="currentResult" class="goal-box"></div> -->
       </div>
       <div class="col-xs-4 text-center">
-        <div id="goalNumber" class="goal-box"></div>
+        <div  class="goal-box">
+        <h4>Aim:</h4>
+        <div id="goalNumber"></div>
+        </div>
       </div>
       <div class="col-xs-4"></div>
     </div>

@@ -98,9 +98,9 @@ nav {
     background-color: var(--numbers-color);
     transition: background-color 0.3s;
   }
-#numbers button:hover {
+/* #numbers button:hover {
   background-color: #5671DB; 
-}
+} */
 
 
   .Operations button{
@@ -110,9 +110,9 @@ nav {
     color:black;
     background-color: var(--button-color);
   }
-  .Operations button:hover {
+  /* .Operations button:hover {
   background-color: #60DB56; 
-}
+} */
 
   .UndoAndReset button{
     margin: 5px;
