@@ -63,7 +63,7 @@ newRound.onclick = () => {
     hasScored = false;
 
     goalNum.textContent = goalValue;
-    currentRound.innerHTML = `Round: ${round + 1}/10`;
+    currentRound.innerHTML = `Round: ${round + 1}/5`;
     solveExp.innerHTML ='';
     errorMsg.innerHTML = '';
     currentResultDisplay.textContent = '';

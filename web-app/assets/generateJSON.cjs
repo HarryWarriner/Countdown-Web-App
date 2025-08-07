@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = 'dailyGames.json';
 
 // Number of games per day
-let numGames = 10;
+let numGames = 5;
+// Amount of iterations (days) to generate
 let numIterations = 10;
 
 
