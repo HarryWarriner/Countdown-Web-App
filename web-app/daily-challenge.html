@@ -28,14 +28,68 @@
   </head>
   <body>
     <div id="navbar"></div>
+    <!-- Start Modal -->
+    <div id="introModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content" style="text-align:center; padding: 20px;">
+          <h2>Welcome to Kibibyte's Daily Countdown!</h2>
+          <p>Your goal is to get as close as possible to the target number using the given numbers and operations.</p>
+          <p>You have 60 seconds per round, and 10 rounds total. Good luck!</p>
+          <button id="startGameBtn" class="btn btn-primary" style="margin-top: 15px;">Start Game</button>
+        </div>
+    </div>
+     </div>
+     
+    <!-- Time's Up Modal 
+    <div id="timesUpModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content" style="text-align:center; padding: 20px;">
+          <h2>Time's Up!</h2>
+          <p>Your current score is: <strong id="finalScoreDisplay">0</strong></p>
+          <button id="newRound" class="btn NextAndSkip" style="margin-top: 15px;">Next Round</button>
+          <hr>
+          <div id="solveExp"></div>
+        </div>
+      </div>
+    </div>
+    Congratulations Modal 
+    <div id="congratsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content" style="text-align:center; padding: 20px;">
+          <h2>Congratulations!</h2>
+          <p>You hit the target exactly!</p>
+          <p>Your current score is: <strong id="congratsScoreDisplay">0</strong></p>
+          <button id="newRound2" class="btn btn-success" style="margin-top: 15px;">Next Round</button>
+        </div>
+      </div>
+    </div>
+    -->
+<!-- End-of-Round Modal -->
+<div id="endRoundModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content" style="text-align:center; padding: 20px;">
+      <h2 id="endRoundTitle">End of Round</h2>
+      <p id="endRoundMessage">Your result:</p>
+      <p>Your current score is: <strong id="endRoundScore">0</strong></p>
+      <button id="newRound" class="btn btn-primary" style="margin-top: 15px;">Next Round</button>
+      <hr>
+      <div id="solveExp"></div>
+    </div>
+  </div>
+</div>
+
+
+   
     <div class="container custom-box">
     <h1>Kibibyte's:</h1>
     <h1> Daily Countdown</h1>
     <br>
      <div class="row">
       <div class="col-xs-6 text-left">
-        <h3><span id="round">Round: 0/5</span></h3>
-        <button class="NextAndSkip" id="newRound">Next Round</button>
+        <h3><span id="round">Round: 0/10</span></h3>
+<!-- <button class="NextAndSkip" id="newRound">Next Round</button> -->
+ <div  class="goal-box text-center"><div id="currentResult"></div></div>
+        
       </div>
       <div class="col-xs-6 text-right">
         <h3><span id="score">Score: 0</span></h3>
@@ -46,10 +100,19 @@
 
     <h2>Time Left: <span id="timer">60</span>s</h2>
    
-    <h4><div id="errorMsg"></div></h4>
-    <br>
-    <div id="goalNumber"></div>
-    <br>
+    <h4><div id="errorMsg" class="errorMessage"></div></h4>
+    <div class="row" style="margin-top: 20px; margin-bottom: 20px;">
+      <div class="col-xs-4 text-center">
+        <!-- <div id="currentResult" class="goal-box"></div> -->
+      </div>
+      <div class="col-xs-4 text-center">
+        <div  class="goal-box">
+        <h4>Aim:</h4>
+        <div id="goalNumber"></div>
+        </div>
+      </div>
+      <div class="col-xs-4"></div>
+    </div>
     <div id="numbers"></div>
     
     <hr>
@@ -66,14 +129,24 @@
 
     <br>
     <hr>
-    <span>Your Current Closest:</span>
-    <div id="currentResult"></div>
+    <!-- <span>Your Current Closest:</span>
+    <div id="currentResult"></div> -->
 
     <hr>
    
     
-    <div id="solveExp"></div>
+    
     <script type="module" src="dailyMain.js"></script>
 </div>
+<script>
+  $(document).ready(function () {
+    $("#introModal").modal("show");
+
+    $("#startGameBtn").click(function () {
+      $("#introModal").modal("hide");
+    });
+  });
+</script>
+
   </body>
 </html>

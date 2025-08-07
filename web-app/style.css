@@ -66,7 +66,7 @@ nav {
 /* ========================================== */
 
 .custom-box {
-  width:80%;
+  width:90%;
   padding: 30px; 
   margin-top: 30px;
   margin-bottom: 30px;
@@ -75,13 +75,15 @@ nav {
   text-align: center;
 }
 
-#goalNumber {
-  display: inline-block;  
-  margin: 10px auto;       
+
+.goal-box {
+  display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
-  border: 2px solid white; 
-  border-radius: 4px;      
+  border: 2px solid white;
+  border-radius: 4px;
+  margin: 10px auto;
+  min-width: 120px;
 }
 
 
@@ -96,9 +98,9 @@ nav {
     background-color: var(--numbers-color);
     transition: background-color 0.3s;
   }
-#numbers button:hover {
+/* #numbers button:hover {
   background-color: #5671DB; 
-}
+} */
 
 
   .Operations button{
@@ -108,9 +110,9 @@ nav {
     color:black;
     background-color: var(--button-color);
   }
-  .Operations button:hover {
+  /* .Operations button:hover {
   background-color: #60DB56; 
-}
+} */
 
   .UndoAndReset button{
     margin: 5px;
@@ -139,4 +141,8 @@ nav {
 
 .NextAndSkip:hover {
   background-color: #5671DB; 
+}
+
+.errorMessage{
+  color:rgb(174, 38, 38);
 }
