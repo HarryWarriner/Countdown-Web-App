@@ -114,84 +114,171 @@ export function calculateScore(result, goal) {
 //     return bestSolution;
 // }
 
+// export function Solver(numbers, target) {
+//     let bestSolution = null;
+//     let closestDiff = Infinity;
+
+//     const seen = new Set();
+
+//     function solve(nums) {
+//         // Memoization key: sorted values
+//         const key = nums.map(n => n.value).sort((a, b) => a - b).join(",");
+//         if (seen.has(key)) return;
+//         seen.add(key);
+
+//         const len = nums.length;
+//         if (len === 1) {
+//             const only = nums[0];
+//             const diff = Math.abs(only.value - target);
+//             if (diff < closestDiff) {
+//                 closestDiff = diff;
+//                 bestSolution = `${only.expr} = ${only.value}`;
+//             }
+//             return;
+//         }
+
+//         for (let i = 0; i < len; i++) {
+//             for (let j = 0; j < len; j++) {
+//                 if (i === j) continue;
+
+//                 const a = nums[i];
+//                 const b = nums[j];
+//                 const rest = nums.filter((_, k) => k !== i && k !== j);
+
+//                 for (const { op, result } of getValidOperations(a.value, b.value)) {
+//                     if (!Number.isFinite(result)) continue;
+
+//                     const newExpr = `(${a.expr} ${op} ${b.expr})`;
+//                     const newNums = rest.concat([{ value: result, expr: newExpr }]);
+
+//                     if (result === target) {
+//                         bestSolution = `${newExpr} = ${result}`;
+//                         closestDiff = 0;
+//                         return;
+//                     }
+
+//                     if (Math.abs(result - target) < closestDiff) {
+//                         bestSolution = `${newExpr} = ${result}`;
+//                         closestDiff = Math.abs(result - target);
+//                     }
+
+//                     solve(newNums);
+//                     if (closestDiff === 0) return;
+//                 }
+//             }
+//         }
+//     }
+
+//     function getValidOperations(a, b) {
+//         const results = [];
+
+//         // Addition and multiplication are commutative, so do only one order
+//         if (a <= b) {
+//             results.push({ op: '+', result: a + b });
+//             results.push({ op: '*', result: a * b });
+//         }
+
+//         // Subtraction and division are not commutative, do both valid orders
+//         if (a > b) results.push({ op: '-', result: a - b });
+//         if (b > a) results.push({ op: '-', result: b - a });
+
+//         if (b !== 0 && a % b === 0) results.push({ op: '/', result: a / b });
+//         if (a !== 0 && b % a === 0) results.push({ op: '/', result: b / a });
+
+//         return results;
+//     }
+
+//     const initial = numbers.map(n => ({ value: n, expr: n.toString() }));
+//     solve(initial);
+
+//     return bestSolution;
+// }
 export function Solver(numbers, target) {
-    let bestSolution = null;
-    let closestDiff = Infinity;
+  let bestSolution = null;
+  let closestDiff = Infinity;
+  let bestSteps = [];
 
-    const seen = new Set();
+  const seen = new Set();
 
-    function solve(nums) {
-        // Memoization key: sorted values
-        const key = nums.map(n => n.value).sort((a, b) => a - b).join(",");
-        if (seen.has(key)) return;
-        seen.add(key);
+  function solve(nums, steps) {
+    const key = nums.map(n => n.value).sort((a, b) => a - b).join(",");
+    if (seen.has(key)) return;
+    seen.add(key);
 
-        const len = nums.length;
-        if (len === 1) {
-            const only = nums[0];
-            const diff = Math.abs(only.value - target);
-            if (diff < closestDiff) {
-                closestDiff = diff;
-                bestSolution = `${only.expr} = ${only.value}`;
-            }
+    if (nums.length === 1) {
+      const only = nums[0];
+      const diff = Math.abs(only.value - target);
+      if (diff < closestDiff) {
+        closestDiff = diff;
+        bestSolution = `${only.expr} = ${only.value}`;
+        bestSteps = steps.slice();
+      }
+      return;
+    }
+
+    for (let i = 0; i < nums.length; i++) {
+      for (let j = 0; j < nums.length; j++) {
+        if (i === j) continue;
+
+        const a = nums[i];
+        const b = nums[j];
+        const rest = nums.filter((_, k) => k !== i && k !== j);
+
+        for (const { op, left, right, result } of getValidOperations(a.value, b.value)) {
+          if (!Number.isFinite(result)) continue;
+
+          const newStep = `${left} ${op} ${right} = ${result}`;
+          const newNums = rest.concat([{ value: result, expr: result.toString() }]);
+          const newSteps = steps.concat(newStep);
+
+          if (result === target) {
+            bestSolution = `${result}`;
+            closestDiff = 0;
+            bestSteps = newSteps;
             return;
+          }
+
+          if (Math.abs(result - target) < closestDiff) {
+            bestSolution = `${result}`;
+            closestDiff = Math.abs(result - target);
+            bestSteps = newSteps;
+          }
+
+          solve(newNums, newSteps);
+          if (closestDiff === 0) return;
         }
+      }
+    }
+  }
 
-        for (let i = 0; i < len; i++) {
-            for (let j = 0; j < len; j++) {
-                if (i === j) continue;
+  function getValidOperations(a, b) {
+    const results = [];
 
-                const a = nums[i];
-                const b = nums[j];
-                const rest = nums.filter((_, k) => k !== i && k !== j);
-
-                for (const { op, result } of getValidOperations(a.value, b.value)) {
-                    if (!Number.isFinite(result)) continue;
-
-                    const newExpr = `(${a.expr} ${op} ${b.expr})`;
-                    const newNums = rest.concat([{ value: result, expr: newExpr }]);
-
-                    if (result === target) {
-                        bestSolution = `${newExpr} = ${result}`;
-                        closestDiff = 0;
-                        return;
-                    }
-
-                    if (Math.abs(result - target) < closestDiff) {
-                        bestSolution = `${newExpr} = ${result}`;
-                        closestDiff = Math.abs(result - target);
-                    }
-
-                    solve(newNums);
-                    if (closestDiff === 0) return;
-                }
-            }
-        }
+    // Commutative: choose one ordering to reduce duplicates
+    if (a <= b) {
+      results.push({ op: '+', left: a, right: b, result: a + b });
+      results.push({ op: '*', left: a, right: b, result: a * b });
+    } else {
+      results.push({ op: '+', left: b, right: a, result: a + b });
+      results.push({ op: '*', left: b, right: a, result: a * b });
     }
 
-    function getValidOperations(a, b) {
-        const results = [];
+    // Subtraction: only positive results, record correct left/right
+    if (a > b) results.push({ op: '-', left: a, right: b, result: a - b });
+    if (b > a) results.push({ op: '-', left: b, right: a, result: b - a });
 
-        // Addition and multiplication are commutative, so do only one order
-        if (a <= b) {
-            results.push({ op: '+', result: a + b });
-            results.push({ op: '*', result: a * b });
-        }
+    // Division: only exact integer results, record correct left/right
+    if (b !== 0 && a % b === 0) results.push({ op: '/', left: a, right: b, result: a / b });
+    if (a !== 0 && b % a === 0) results.push({ op: '/', left: b, right: a, result: b / a });
 
-        // Subtraction and division are not commutative, do both valid orders
-        if (a > b) results.push({ op: '-', result: a - b });
-        if (b > a) results.push({ op: '-', result: b - a });
+    return results;
+  }
 
-        if (b !== 0 && a % b === 0) results.push({ op: '/', result: a / b });
-        if (a !== 0 && b % a === 0) results.push({ op: '/', result: b / a });
+  const initial = numbers.map(n => ({ value: n, expr: n.toString() }));
+  solve(initial, []);
 
-        return results;
-    }
-
-    const initial = numbers.map(n => ({ value: n, expr: n.toString() }));
-    solve(initial);
-
-    return bestSolution;
+  // Join with commas for inline display; use '<br>' if you want line breaks in HTML
+  return bestSteps.join(', ');
 }
 
 

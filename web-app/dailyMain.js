@@ -51,6 +51,7 @@ let today = new Date();
 let date = today.toISOString().split('T')[0];
 console.log("Today:", date);
 
+
 startGame.onclick = () => {
    nextround()
 };
@@ -91,11 +92,11 @@ function nextround() {
         hasScored = false;
 
         goalNum.textContent = goalValue;
-        currentRound.innerHTML = `Round: ${round + 1}/5`;
-        solveExp.innerHTML ='';
-        errorMsg.innerHTML = '';
+        currentRound.textContent = `Round: ${round + 1}/5`;
+        solveExp.textContent ='';
+        errorMsg.textContent = '';
         currentResultDisplay.textContent = '';
-        scoreDisplay.innerHTML = `Score: ${playerScore}`;
+        scoreDisplay.textContent = `Score: ${playerScore}`;
 
         console.log(originalNumbers);
         console.log(goalValue);
@@ -108,8 +109,20 @@ function nextround() {
     }
 };
 
+function endRound() {
+  canSubmit = false;
+  hasScored = true;
+  stopTimer();
+  if (round < 5) round += 1;
+  canNextRound = true;
+}
+
+function stopTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
 function startTimer() {
-    clearInterval(timerInterval); // clear old timer if any
+    stopTimer();
     timeLeft = 60;
     timerDisplay.textContent = timeLeft;
 
@@ -118,8 +131,8 @@ function startTimer() {
         timerDisplay.textContent = timeLeft;
 
         if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            timerDisplay.textContent = "0";
+            stopTimer();
+            // timerDisplay.textContent = "0";
             // errorMsg.innerHTML = "Time's up!";
             submitScore();
 
@@ -139,9 +152,15 @@ function startTimer() {
 
 
 // Submit button
-submitBtn.onclick =() => {
-    submitScore();
-}
+submitBtn.onclick = () => {
+  if (!canSubmit || hasScored) return;
+  stopTimer();
+  submitScore();
+  if (nextTurnModalShow) {
+    showEndRoundModal({ title: "End of Round", message: "You skipped the timer.", score: playerScore });
+    canNextRound = true;
+  }
+};
 
 // Operator buttons
 btnPlus.onclick = () => setOperator('+');
@@ -193,7 +212,7 @@ function showEndRoundModal({ title, message, score, isGameOver = false }) {
 
 // Render buttons for number pool
 function renderNumbers() {
-    playNums.innerHTML = '';
+    playNums.textContent = '';
     buttonIndexMap = [];
 
     // let closestNum = null;
@@ -202,6 +221,8 @@ function renderNumbers() {
     outputNumbers.forEach((num, idx) => {
         if (num !== null) {
             const btn = document.createElement('button');
+            btn.className = 'number-btn';
+            btn.type = 'button';
             btn.textContent = num;
             const visibleIndex = buttonIndexMap.length;
             buttonIndexMap.push(idx);
@@ -224,7 +245,7 @@ function renderNumbers() {
     // Display the best result so far
     currentResult = bestResultSoFar;
     if (bestResultSoFar !== null) {
-        currentResultDisplay.textContent = `Closest: ${bestResultSoFar} `;
+        currentResultDisplay.textContent = ` ${bestResultSoFar} `;
     } else {
         currentResultDisplay.textContent = '';
     }
@@ -235,7 +256,7 @@ function renderNumbers() {
 // When number button is clicked
 function handleNumberClick(visibleIndex) {
     const realIndex = buttonIndexMap[visibleIndex];
-
+    
     // Deselect
     if (selectedNumbers.includes(realIndex)) {
         selectedNumbers = selectedNumbers.filter(i => i !== realIndex);
@@ -261,7 +282,8 @@ function highlightSelection() {
     const buttons = playNums.querySelectorAll('button');
     buttons.forEach((btn, visibleIdx) => {
         const realIdx = buttonIndexMap[visibleIdx];
-        btn.style.backgroundColor = selectedNumbers.includes(realIdx) ? '#ddd' : '';
+        btn.classList.toggle('selected', selectedNumbers.includes(realIdx));
+        btn.setAttribute('aria-pressed', selectedNumbers.includes(realIdx));
     });
 }
 
@@ -269,10 +291,26 @@ function highlightSelection() {
 // Set operator
 function setOperator(op) {
     selectedOperator = op;
+
+     // remove selection from all operator buttons
+    document.querySelectorAll('.operator-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+
+    // add selection to the active operator
+    switch (op) {
+        case '+': btnPlus.classList.add('selected'); break;
+        case '-': btnMinus.classList.add('selected'); break;
+        case 'x': btnMultiply.classList.add('selected'); break;
+        case '/': btnDivide.classList.add('selected'); break;
+    }
+
     if (selectedNumbers.length === 2) {
         performSelectedOperation();
     }
 }
+
+
 
 // Run calculation
 function performSelectedOperation() {
@@ -280,11 +318,12 @@ function performSelectedOperation() {
     const a = outputNumbers[firstIdx];
     const b = outputNumbers[secondIdx];
     const result = Logic.performOperation(a, b, selectedOperator);
-    errorMsg.innerHTML = '';
+    errorMsg.textContent = '';
 
     if (result === null) {
-        errorMsg.innerHTML = ' Invalid Operation, cant be negative or a fraction';
+        errorMsg.textContent = ' Invalid Operation, cant be negative or a fraction';
         resetSelection();
+        
         return;
     }
 
@@ -309,9 +348,7 @@ function performSelectedOperation() {
         hasScored = true;
         canSubmit = false;
         nextTurnModalShow = false;
-        timeLeft = 0;
-        round += 1;
-        canNextRound = true;
+        stopTimer();
         showEndRoundModal({
             title: "Congratulations!",
             message: "You hit the target exactly!",
@@ -321,8 +358,9 @@ function performSelectedOperation() {
         
 
         const method = Logic.Solver(originalNumbers, goalValue);
-        solveExp.innerHTML = `How To: ${method}`;
+        solveExp.textContent = `How To: ${method}`;
         resetSelection();
+        endRound();
         renderNumbers();
         return; // don't continue to renderNumbers again
     }
@@ -351,10 +389,11 @@ function performSelectedOperation() {
 function submitScore() {
     if (!canSubmit || hasScored) return;
 
-    if (currentResult === null) {
-        errorMsg.innerHTML = `Please select a number.`;
-        return;
-    }
+    // if (currentResult === null) {
+    //     errorMsg.innerHTML = `Please select a number.`;
+    //     return;
+    // }
+    
 
     const scoreEarned = Logic.calculateScore(currentResult, goalValue);
     if (scoreEarned > 0) {
@@ -363,29 +402,28 @@ function submitScore() {
         const msg = scoreEarned === 10
             ? `Exact! +10 points`
             : `Close! +7 points`;
-        errorMsg.innerHTML = msg;
-        scoreDisplay.innerHTML = `Score: ${playerScore}`;
+        errorMsg.textContent = msg;
+        scoreDisplay.textContent = `Score: ${playerScore}`;
     } else {
-        errorMsg.innerHTML = `Too far! No points`;
-        scoreDisplay.innerHTML = `Score: ${playerScore}`;
+        errorMsg.textContent = `Too far! No points`;
+        scoreDisplay.textContent = `Score: ${playerScore}`;
     }
     canSubmit = false;
     console.log("HI")
     const  method = Logic.Solver(originalNumbers, goalValue);
-    solveExp.innerHTML = `How To: ${method}`;
+    solveExp.textContent = `How To: ${method}`;
     timeLeft = 0;
-    // round += 1;
-    if (round < 5) {
-        round += 1;
-    }
 
-
+    endRound();
 }
 
 // Reset selected numbers and operator
 function resetSelection() {
     selectedNumbers = [];
     selectedOperator = null;
+    document.querySelectorAll('.operator-btn').forEach(btn => {
+    btn.classList.remove('selected');
+  });
 }
 
   });
