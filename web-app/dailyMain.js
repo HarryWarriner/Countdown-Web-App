@@ -46,6 +46,9 @@ let round = 0;
 let bestResultSoFar = null;
 let nextTurnModalShow = true;
 
+let roundsSummary = []; // { round, target, got, points }
+
+
 
 let today = new Date();
 let date = today.toISOString().split('T')[0];
@@ -82,6 +85,7 @@ function nextround() {
         goalValue = data[date].goalValueArray[round];
         console.log("Output Numbers:", originalNumbers);
         console.log("Goal Number:", goalValue);
+        console.log("Stored", roundsSummary);
         historyStack = [];
         selectedNumbers = [];
         nextTurnModalShow = true;
@@ -98,8 +102,6 @@ function nextround() {
         currentResultDisplay.textContent = '';
         scoreDisplay.textContent = `Score: ${playerScore}`;
 
-        console.log(originalNumbers);
-        console.log(goalValue);
             
         renderNumbers();
         startTimer();
@@ -199,15 +201,26 @@ function showEndRoundModal({ title, message, score, isGameOver = false }) {
     document.getElementById("endRoundScore").textContent = score;
 
     const nextBtn = document.getElementById("newRound");
+    const solve = document.getElementById("solveExp");
+    const tableContainer = document.getElementById("summaryTableContainer");
     if (isGameOver) {
         nextBtn.style.display = "none";
+
+        // clear + HIDE "How To" on final screen
+        solve.textContent = '';
+        solve.style.display = 'none';
+
+        // show the full summary table
+        populateSummaryTable();
+        tableContainer.style.display = 'block';
     } else {
         nextBtn.style.display = "inline-block";
+        solve.style.display = 'block';
+        tableContainer.style.display = 'none';
     }
 
     $("#endRoundModal").modal("show");
 }
-
 
 
 // Render buttons for number pool
@@ -349,6 +362,14 @@ function performSelectedOperation() {
         canSubmit = false;
         nextTurnModalShow = false;
         stopTimer();
+
+        roundsSummary.push({
+            round: round + 1,
+            target: goalValue,
+            got: result,
+            points
+        });
+
         showEndRoundModal({
             title: "Congratulations!",
             message: "You hit the target exactly!",
@@ -386,6 +407,24 @@ function performSelectedOperation() {
     renderNumbers();
 }
 
+function populateSummaryTable() {
+  const tbody = document.querySelector('#summaryTable tbody');
+  tbody.innerHTML = ''; // clear old rows
+
+  roundsSummary.forEach(r => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${r.round}</td>
+      <td>${r.target}</td>
+      <td>${r.got ?? ''}</td>
+      <td>${r.points}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+
+
 function submitScore() {
     if (!canSubmit || hasScored) return;
 
@@ -396,6 +435,7 @@ function submitScore() {
     
 
     const scoreEarned = Logic.calculateScore(currentResult, goalValue);
+
     if (scoreEarned > 0) {
         playerScore += scoreEarned;
 
@@ -410,6 +450,13 @@ function submitScore() {
     }
     canSubmit = false;
     console.log("HI")
+
+    roundsSummary.push({
+        round: round + 1,
+        target: goalValue,
+        got: currentResult, // this is your "Closest" value shown
+        points: Math.max(0, scoreEarned)
+    });
     const  method = Logic.Solver(originalNumbers, goalValue);
     solveExp.textContent = `How To: ${method}`;
     timeLeft = 0;
