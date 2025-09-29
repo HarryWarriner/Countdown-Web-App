@@ -303,26 +303,40 @@ function highlightSelection() {
 
 // Set operator
 function setOperator(op) {
-    selectedOperator = op;
+  // Toggle off if clicking the same operator
+  if (selectedOperator === op) {
+    selectedOperator = null;
+    updateOperatorButtonsHighlight();
+    return;
+  }
 
-     // remove selection from all operator buttons
-    document.querySelectorAll('.operator-btn').forEach(btn => {
-        btn.classList.remove('selected');
-    });
+  // Select a new operator
+  selectedOperator = op;
+  updateOperatorButtonsHighlight();
 
-    // add selection to the active operator
-    switch (op) {
-        case '+': btnPlus.classList.add('selected'); break;
-        case '-': btnMinus.classList.add('selected'); break;
-        case 'x': btnMultiply.classList.add('selected'); break;
-        case '/': btnDivide.classList.add('selected'); break;
-    }
-
-    if (selectedNumbers.length === 2) {
-        performSelectedOperation();
-    }
+  // If two numbers are already selected, perform immediately
+  if (selectedNumbers.length === 2) {
+    performSelectedOperation();
+  }
 }
 
+const operatorButtons = { '+': btnPlus, '-': btnMinus, 'x': btnMultiply, '/': btnDivide };
+
+function updateOperatorButtonsHighlight() {
+  // clear all first
+  Object.values(operatorButtons).forEach(btn => {
+    btn.classList.remove('selected');
+    btn.setAttribute('aria-pressed', 'false');
+  });
+  // highlight the active one (if any)
+  if (selectedOperator) {
+    const active = operatorButtons[selectedOperator];
+    if (active) {
+      active.classList.add('selected');
+      active.setAttribute('aria-pressed', 'true');
+    }
+  }
+}
 
 
 // Run calculation
@@ -367,7 +381,7 @@ function performSelectedOperation() {
             round: round + 1,
             target: goalValue,
             got: result,
-            points: 10
+            points: Math.max(0, Logic.calculateScore(result, goalValue))
         });
 
         showEndRoundModal({
@@ -468,9 +482,7 @@ function submitScore() {
 function resetSelection() {
     selectedNumbers = [];
     selectedOperator = null;
-    document.querySelectorAll('.operator-btn').forEach(btn => {
-    btn.classList.remove('selected');
-  });
+    updateOperatorButtonsHighlight();
 }
 
   });
