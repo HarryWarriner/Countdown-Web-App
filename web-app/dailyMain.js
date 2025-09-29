@@ -367,7 +367,7 @@ function performSelectedOperation() {
             round: round + 1,
             target: goalValue,
             got: result,
-            points
+            points: 10
         });
 
         showEndRoundModal({
