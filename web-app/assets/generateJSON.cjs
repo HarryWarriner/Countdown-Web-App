@@ -6,7 +6,7 @@ const path = 'dailyGames.json';
 // Number of games per day
 let numGames = 5;
 // Amount of iterations (days) to generate
-let numIterations = 30;
+let numIterations = 365;
 
 
 // Load existing data 
