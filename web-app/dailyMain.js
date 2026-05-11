@@ -30,6 +30,8 @@ const btnDivide = el("divide");
 const btnUndo = el("undo");
 const btnReset = el("reset");
 
+const moveHistoryDisplay = el("moveHistory");
+
 // Game state
 let timerInterval = null;
 let timeLeft = 60;
@@ -52,7 +54,7 @@ let isUntimedPractice = false;
 
 let roundsSummary = []; // { round, target, got, points }
 
-
+let moveHistory = [];
 
 let today = new Date();
 let date = today.toISOString().split('T')[0];
@@ -99,6 +101,8 @@ function nextround() {
         canSubmit = true;
         hasScored = false;
         isUntimedPractice = false;
+        moveHistory = [];
+        renderMoveHistory();
 
         goalNum.textContent = goalValue;
         currentRound.textContent = `Round: ${round + 1}/5`;
@@ -208,6 +212,8 @@ btnUndo.onclick = () => {
     }
 
     const lastState = historyStack.pop();
+    moveHistory.pop();
+    renderMoveHistory();
     outputNumbers = [...lastState.numbers];
     currentResult = lastState.currentResult;
     currentResultDisplay.textContent = currentResult ?? '';
@@ -221,6 +227,8 @@ btnReset.onclick = () => {
     historyStack = [];
     currentResult = null;
     // currentResultDisplay.textContent = '';
+    moveHistory = [];
+    renderMoveHistory();
     resetSelection();
     renderNumbers();
 };
@@ -341,6 +349,18 @@ function renderNumbers() {
 }
 
 
+function renderMoveHistory() {
+  if (!moveHistoryDisplay) return;
+
+  moveHistoryDisplay.innerHTML = "";
+
+  moveHistory.forEach((move) => {
+    const li = document.createElement("li");
+    li.textContent = move;
+    moveHistoryDisplay.appendChild(li);
+  });
+}
+
 // When number button is clicked
 function handleNumberClick(visibleIndex) {
     const realIndex = buttonIndexMap[visibleIndex];
@@ -420,6 +440,7 @@ function performSelectedOperation() {
     const a = outputNumbers[firstIdx];
     const b = outputNumbers[secondIdx];
     const result = Logic.performOperation(a, b, selectedOperator);
+    const moveText = `${a} ${selectedOperator} ${b} = ${result}`;
     errorMsg.textContent = '';
 
     if (result === null) {
@@ -428,6 +449,8 @@ function performSelectedOperation() {
         
         return;
     }
+    moveHistory.push(moveText);
+    renderMoveHistory();
 
     historyStack.push({
         numbers: [...outputNumbers],

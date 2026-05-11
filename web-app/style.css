@@ -410,6 +410,35 @@ hr {
   margin: 25px auto;
 }
 
+
+.moves-section {
+  margin: 28px auto 0;
+  padding: 18px 20px;
+  max-width: 520px;
+  background: #fafafa;
+  border: 1px solid #ececec;
+  border-radius: 14px;
+  text-align: left;
+}
+
+.moves-section h4 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.move-history {
+  margin: 0;
+  padding-left: 22px;
+  color: #333;
+}
+
+.move-history li {
+  margin: 8px 0;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+}
+
+
 /* RESPONSIVE */
 
 @media (max-width: 700px) {
