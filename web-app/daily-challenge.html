@@ -2,175 +2,188 @@
 <html>
   <head>
     <title>Countdown</title>
-  
-    <link rel="stylesheet" href="style.css" type="text/css"/>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="style.css" type="text/css" />
+
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
     />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
 
-    <style>
- 
-</style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     <script>
       $(function () {
         $("#navbar").load("../../../navbar.html");
       });
     </script>
   </head>
+
   <body>
     <div id="navbar"></div>
+
     <!-- Start Modal -->
-    <div id="introModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div
+      id="introModal"
+      class="modal fade countdown-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+      data-backdrop="static"
+      data-keyboard="false"
+    >
       <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content" style="text-align:center; padding: 20px;">
+        <div class="modal-content">
           <h2>Welcome to Kibibyte's Daily Countdown!</h2>
-          <p>Your goal is to get as close as possible to the target number using the given numbers and operations.</p>
-          <p>You have 60 seconds per round, and 5 rounds total. Good luck!</p>
-          <button id="startGameBtn" class="btn btn-primary" style="margin-top: 15px;">Start Game</button>
+          <p>
+            Get as close as possible to the target number using the available
+            numbers and operations.
+          </p>
+          <p>You have 60 seconds per round and 5 rounds in total.</p>
+
+          <button id="startGameBtn" class="btn countdown-primary-btn">
+            Start Game
+          </button>
         </div>
+      </div>
     </div>
-     </div>
-     
-    <!-- Time's Up Modal 
-    <div id="timesUpModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+    <!-- End-of-Round Modal -->
+    <div
+      id="endRoundModal"
+      class="modal fade countdown-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+      data-backdrop="static"
+      data-keyboard="false"
+    >
       <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content" style="text-align:center; padding: 20px;">
-          <h2>Time's Up!</h2>
-          <p>Your current score is: <strong id="finalScoreDisplay">0</strong></p>
-          <button id="newRound" class="btn NextAndSkip" style="margin-top: 15px;">Next Round</button>
-          <hr>
+        <div class="modal-content">
+          <h2 id="endRoundTitle">End of Round</h2>
+
+          <p id="endRoundMessage">Your result:</p>
+          <p>Your current score is: <strong id="endRoundScore">0</strong></p>
+
+          <div id="summaryTableContainer">
+            <table id="summaryTable" class="table table-striped table-condensed">
+              <thead>
+                <tr>
+                  <th>Round</th>
+                  <th>Target</th>
+                  <th>Your result</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="modal-action-row">
+            <button id="continueUntimed" class="btn countdown-secondary-btn">
+              Keep Going Without Timer
+            </button>
+
+            <button id="showAnswerBtn" class="btn countdown-primary-btn">
+              Show Answer
+            </button>
+
+            <button id="newRound" class="btn countdown-primary-btn">
+              Next Round
+            </button>
+          </div>
+
+          <hr />
+
           <div id="solveExp"></div>
         </div>
       </div>
     </div>
-    Congratulations Modal 
-    <div id="congratsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content" style="text-align:center; padding: 20px;">
-          <h2>Congratulations!</h2>
-          <p>You hit the target exactly!</p>
-          <p>Your current score is: <strong id="congratsScoreDisplay">0</strong></p>
-          <button id="newRound2" class="btn btn-success" style="margin-top: 15px;">Next Round</button>
-        </div>
-      </div>
-    </div>
-    -->
-<!-- End-of-Round Modal -->
-<div id="endRoundModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content" style="text-align:center; padding: 20px;">
-      <h2 id="endRoundTitle">End of Round</h2>
-      <p id="endRoundMessage">Your result:</p>
-      <p>Your current score is: <strong id="endRoundScore">0</strong></p>
-      
-      <div id="summaryTableContainer" style="margin-top:10px; display:none; text-align:left; max-height:250px; overflow:auto;">
-      <table id="summaryTable" class="table table-striped table-condensed" style="background:white; color:#333;">
-        <thead>
-          <tr>
-            <th>Round</th>
-            <th>Target</th>
-            <th>Your result</th>
-            <th>Points</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- JS will insert rows here -->
-        </tbody>
-      </table>
-    </div>
 
-      <button id="newRound" class="btn btn-primary" style="margin-top: 15px;">Next Round</button>
-      <hr>
-      <div id="solveExp"></div>
-    </div>
-  </div>
-</div>
+    <main class="countdown-page">
+      <section class="countdown-card">
+        <header class="countdown-header">
+          <p class="eyebrow">Kibibyte's</p>
+          <h1>Daily Countdown</h1>
+        </header>
 
+        <section class="game-status-grid">
+          <div class="status-pill">
+            <span class="status-label">Round</span>
+            <strong id="round">0/5</strong>
+          </div>
 
-   
-    <div class="container custom-box">
-    <h1>Kibibyte's:</h1>
-    <h1> Daily Countdown</h1>
-    <br>
-     <div class="row">
-      <div class="col-xs-6 text-left">
-        <h3><span id="round">Round: 0/5</span></h3>
-<!-- <button class="NextAndSkip" id="newRound">Next Round</button> -->
- <!-- <div  class="goal-box text-center"><div id="currentResult"></div></div> -->
-        
-      </div>
-      <div class="col-xs-6 text-right">
-        <h3><span id="score">Score: 0</span></h3>
-        
-      </div>
-      <button class="NextAndSkip" id="submit">Skip (Submit & End Round)</button>
-    </div> 
-    
+          <div class="status-pill timer-pill">
+            <span class="status-label">Time Left</span>
+            <strong><span id="timer">60</span>s</strong>
+          </div>
 
-    <h2>Time Left: <span id="timer">60</span>s</h2>
-   
-    <h4><div id="errorMsg" class="errorMessage"></div></h4>
-    <div class="row" style="margin-top: 20px; margin-bottom: 20px;">
-      <div class="col-xs-4 text-center">
-        <!-- <div id="currentResult" class="goal-box"></div> -->
-         <div  class="goal-box text-center">
-          <h4>Closest:</h4>
-          <div id="currentResult"></div>
-        </div>
-      </div>
-      <div class="col-xs-4 text-center">
-        
-      </div>
-      <div class="col-xs-4 text-right"></div>
-      <div  class="goal-box">
-        <h4>Aim:</h4>
-        <div id="goalNumber"></div>
-        </div>
-    </div>
-    <div id="numbers"></div>
-    
-    <hr>
-    <div class="Operations">
-    <button id="plus" class="operator-btn">+</button>
-    <button id="minus" class="operator-btn">-</button>
-    <button id="multiply" class="operator-btn">x</button>
-    <button id="divide" class="operator-btn">/</button>
+          <div class="status-pill">
+            <span class="status-label">Score</span>
+            <strong id="score">0</strong>
+          </div>
+        </section>
 
-    </div>
-    <div class="UndoAndReset">
-    <button id="undo">Undo</button>
-    <button id="reset">Reset</button>
-   </div>
+        <div id="errorMsg" class="errorMessage"></div>
 
-    <br>
-    <!-- <hr> -->
-    <!-- <span>Your Current Closest:</span>
-    <div id="currentResult"></div> -->
+        <section class="main-game-grid">
+          <article class="game-panel target-panel">
+            <h4>Aim</h4>
+            <div id="goalNumber" class="big-number-display"></div>
+          </article>
 
-    <hr>
-   
-    
-    
+          <article class="game-panel result-panel">
+            <h4>Closest</h4>
+            <div id="currentResult" class="big-number-display"></div>
+          </article>
+        </section>
+
+        <section class="numbers-section">
+          <h4>Numbers</h4>
+          <div id="numbers"></div>
+        </section>
+
+        <section class="controls-section">
+          <div class="Operations">
+            <button id="plus" class="operator-btn">+</button>
+            <button id="minus" class="operator-btn">−</button>
+            <button id="multiply" class="operator-btn">×</button>
+            <button id="divide" class="operator-btn">÷</button>
+          </div>
+
+          <div class="UndoAndReset">
+            <button id="undo">Undo</button>
+            <button id="reset">Reset</button>
+          </div>
+        </section>
+
+        <footer class="round-actions">
+          <button class="countdown-secondary-btn" id="submit">
+            Skip / Submit Round
+          </button>
+        </footer>
+      </section>
+    </main>
+
     <script type="module" src="dailyMain.js"></script>
-</div>
-<script>
-  $(document).ready(function () {
-    $("#introModal").modal("show");
 
-    $("#startGameBtn").click(function () {
-      $("#introModal").modal("hide");
-    });
-  });
-</script>
+    <script>
+      $(document).ready(function () {
+        $("#introModal").modal("show");
 
+        $("#startGameBtn").click(function () {
+          $("#introModal").modal("hide");
+        });
+      });
+    </script>
   </body>
 </html>

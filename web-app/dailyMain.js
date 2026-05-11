@@ -20,6 +20,9 @@ const scoreDisplay = el("score");
 const currentResultDisplay = el("currentResult");
 const submitBtn = el("submit")
 
+const continueUntimedBtn = el("continueUntimed");
+const showAnswerBtn = el("showAnswerBtn");
+
 const btnPlus = el("plus");
 const btnMinus = el("minus");
 const btnMultiply = el("multiply");
@@ -45,6 +48,7 @@ let buttonIndexMap = [];
 let round = 0;
 let bestResultSoFar = null;
 let nextTurnModalShow = true;
+let isUntimedPractice = false;
 
 let roundsSummary = []; // { round, target, got, points }
 
@@ -94,13 +98,14 @@ function nextround() {
         bestResultSoFar = null;
         canSubmit = true;
         hasScored = false;
+        isUntimedPractice = false;
 
         goalNum.textContent = goalValue;
         currentRound.textContent = `Round: ${round + 1}/5`;
         solveExp.textContent ='';
         errorMsg.textContent = '';
         currentResultDisplay.textContent = '';
-        scoreDisplay.textContent = `Score: ${playerScore}`;
+        scoreDisplay.textContent = `${playerScore}`;
 
             
         renderNumbers();
@@ -134,19 +139,19 @@ function startTimer() {
 
         if (timeLeft <= 0) {
             stopTimer();
-            // timerDisplay.textContent = "0";
-            // errorMsg.innerHTML = "Time's up!";
-            submitScore();
 
-            if (nextTurnModalShow ){
+            submitScore(false); // score is recorded, but answer is hidden
+
+            if (nextTurnModalShow) {
                 setTimeout(() => {
                     showEndRoundModal({
                         title: "Time's Up!",
-                        message: "You ran out of time.",
-                        score: playerScore
+                        message: "Your score has been recorded. You can keep trying for fun, or reveal the answer and move on.",
+                        score: playerScore,
+                        showAnswer: false,
+                        allowUntimed: true
                     });
                 }, 300);
-                canNextRound = true;
             }
         }
     }, 1000);
@@ -155,11 +160,36 @@ function startTimer() {
 
 // Submit button
 submitBtn.onclick = () => {
+  if (isUntimedPractice) {
+    showEndRoundModal({
+      title: "Practice Finished",
+      message: "Your score was already recorded when time ran out.",
+      score: playerScore,
+      showAnswer: true,
+      allowUntimed: false
+    });
+
+    const method = Logic.Solver(originalNumbers, goalValue);
+    solveExp.textContent = `How To: ${method}`;
+    solveExp.style.display = "block";
+
+    canNextRound = true;
+    return;
+  }
+
   if (!canSubmit || hasScored) return;
+
   stopTimer();
-  submitScore();
+  submitScore(true);
+
   if (nextTurnModalShow) {
-    showEndRoundModal({ title: "End of Round", message: "You skipped the timer.", score: playerScore });
+    showEndRoundModal({
+      title: "End of Round",
+      message: "You skipped the timer.",
+      score: playerScore,
+      showAnswer: true
+    });
+
     canNextRound = true;
   }
 };
@@ -195,28 +225,73 @@ btnReset.onclick = () => {
     renderNumbers();
 };
 
-function showEndRoundModal({ title, message, score, isGameOver = false }) {
+continueUntimedBtn.onclick = () => {
+  $("#endRoundModal").modal("hide");
+
+  isUntimedPractice = true;
+  canSubmit = false;
+  hasScored = true;
+  canNextRound = false;
+
+  timerDisplay.textContent = "∞";
+  errorMsg.textContent =
+    "Practice mode: score already recorded. Press Skip / Submit Round when finished.";
+};
+
+showAnswerBtn.onclick = () => {
+    const method = Logic.Solver(originalNumbers, goalValue);
+
+    solveExp.textContent = `How To: ${method}`;
+    solveExp.style.display = "block";
+
+    showAnswerBtn.style.display = "none";
+    continueUntimedBtn.style.display = "none";
+    newRound.style.display = "inline-block";
+
+    canNextRound = true;
+};
+
+function showEndRoundModal({
+    title,
+    message,
+    score,
+    isGameOver = false,
+    showAnswer = true,
+    allowUntimed = false
+}) {
     document.getElementById("endRoundTitle").textContent = title;
     document.getElementById("endRoundMessage").textContent = message;
     document.getElementById("endRoundScore").textContent = score;
 
     const nextBtn = document.getElementById("newRound");
+    const continueBtn = document.getElementById("continueUntimed");
+    const showAnswerButton = document.getElementById("showAnswerBtn");
     const solve = document.getElementById("solveExp");
     const tableContainer = document.getElementById("summaryTableContainer");
+
+    solve.textContent = '';
+    solve.style.display = 'none';
+    tableContainer.style.display = 'none';
+
     if (isGameOver) {
         nextBtn.style.display = "none";
+        continueBtn.style.display = "none";
+        showAnswerButton.style.display = "none";
 
-        // clear + HIDE "How To" on final screen
-        solve.textContent = '';
-        solve.style.display = 'none';
-
-        // show the full summary table
         populateSummaryTable();
         tableContainer.style.display = 'block';
+    } else if (allowUntimed) {
+        nextBtn.style.display = "none";
+        continueBtn.style.display = "inline-block";
+        showAnswerButton.style.display = "inline-block";
     } else {
         nextBtn.style.display = "inline-block";
-        solve.style.display = 'block';
-        tableContainer.style.display = 'none';
+        continueBtn.style.display = "none";
+        showAnswerButton.style.display = "none";
+
+        if (showAnswer) {
+            solve.style.display = 'block';
+        }
     }
 
     $("#endRoundModal").modal("show");
@@ -439,7 +514,7 @@ function populateSummaryTable() {
 
 
 
-function submitScore() {
+function submitScore(showAnswer = true) {
     if (!canSubmit || hasScored) return;
 
     // if (currentResult === null) {
@@ -457,10 +532,10 @@ function submitScore() {
             ? `Exact! +10 points`
             : `Close! +7 points`;
         errorMsg.textContent = msg;
-        scoreDisplay.textContent = `Score: ${playerScore}`;
+        scoreDisplay.textContent = `${playerScore}`;
     } else {
         errorMsg.textContent = `Too far! No points`;
-        scoreDisplay.textContent = `Score: ${playerScore}`;
+        scoreDisplay.textContent = `${playerScore}`;
     }
     canSubmit = false;
     console.log("HI")
@@ -471,10 +546,14 @@ function submitScore() {
         got: currentResult, // this is your "Closest" value shown
         points: Math.max(0, scoreEarned)
     });
-    const  method = Logic.Solver(originalNumbers, goalValue);
-    solveExp.textContent = `How To: ${method}`;
-    timeLeft = 0;
+    if (showAnswer) {
+        const method = Logic.Solver(originalNumbers, goalValue);
+        solveExp.textContent = `How To: ${method}`;
+    } else {
+        solveExp.textContent = '';
+    }
 
+    timeLeft = 0;
     endRound();
 }
 

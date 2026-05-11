@@ -1,154 +1,457 @@
-/* ==========================================================================
-
-	Google Font
-
-========================================================================== */
-
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&subset=devanagari,latin-ext";
-
 @import "https://fonts.googleapis.com/css?family=Oranienbaum&subset=cyrillic,cyrillic-ext,latin-ext";
 
-/* navigation styles
-/* ========================================== */
- /* Navbar Styles */
- .navbar {
-border:none;
-  padding: 10px 20px;
+:root {
+  --underline-height: 0.5em;
+  --transition-duration: 0.5s;
+  --button-color: #222;
+  --numbers-color: #f5f5f5;
+  --border-color: #ececec;
+  --text-main: #333;
+  --text-muted: #777;
 }
+
+/* BASE */
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: var(--text-muted);
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  line-height: 27px;
+  font-weight: 300;
+  text-align: center;
+}
+
+a,
+input,
+textarea,
+button,
+body,
+img {
+  transition: all 0.3s ease;
+}
+
+a {
+  text-decoration: none;
+  outline: none;
+  color: #222;
+}
+
+a:hover,
+a:focus,
+button:focus,
+.btn:focus {
+  text-decoration: none;
+  outline: none;
+}
+
+/* NAVBAR */
+
+#navbar {
+  position: relative;
+  z-index: 50;
+  background: white;
+}
+
+.navbar {
+  border: none;
+  padding: 10px 20px;
+  z-index: 50;
+  background-color: white;
+  margin: 2em 0;
+}
+
 .navbar-brand {
   font-weight: bold;
   color: #333 !important;
 }
+
 .navbar-nav {
   margin-left: auto;
 }
+
 .navbar-nav > li > a {
   color: #333 !important;
   font-size: 16px;
   transition: color 0.3s;
 }
+
 .navbar-nav > li > a:hover {
   color: #007bff !important;
 }
-/* Centering navbar links */
+
 .navbar-collapse {
   justify-content: flex-end;
 }
-/* Responsive Navbar */
+
 @media (max-width: 990px) {
   .navbar-nav {
     float: none;
     text-align: center;
   }
+
   .navbar-nav > li {
     display: block;
   }
 }
-/* Naviugation
-/* ========================================== */
-:root {
-  --underline-height: 0.5em;
-  --transition-duration: 0.5s;
-  --button-color:#38DC8D;
-  --numbers-color:#37BDDB;
+
+/* TYPOGRAPHY */
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 400;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
 }
 
-nav {
-  position: relative;
-  white-space: nowrap;
-  background: white;
-  padding: var(--underline-height) 0;
-  margin: 2em 0;
-  box-shadow: 0 1em 2em rgba(0, 0, 0, 0.05);
+h1 {
+  color: #000;
+  font-size: 1.8rem;
+  font-weight: 700;
 }
 
-/* Containers
-/* ========================================== */
+h2 {
+  color: #444;
+  font-size: 1rem;
+}
 
-.custom-box {
-  width:90%;
-  padding: 30px; 
-  margin-top: 30px;
-  margin-bottom: 30px;
-  background-color: #343a40; 
-  color: white; 
+h3 {
+  color: #444;
+  font-size: 14px;
+  letter-spacing: 4px;
+}
+
+h4 {
+  color: #444;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+p,
+span,
+label {
+  color: var(--text-muted);
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+/* PAGE */
+
+.countdown-page {
+  padding: 40px 0 80px;
+  background: #fff;
+}
+
+.countdown-card {
+  width: min(900px, calc(100% - 40px));
+  padding: 35px 25px;
+  margin: 40px auto 80px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
   text-align: center;
 }
 
+.countdown-header {
+  margin-bottom: 30px;
+}
+
+.countdown-header h1 {
+  margin: 5px 0;
+}
+
+.countdown-status {
+  margin-bottom: 20px;
+}
+
+.timer-heading {
+  color: #444;
+  margin: 25px 0;
+}
+
+.countdown-targets {
+  margin: 30px 0;
+}
+
+/* GOAL / RESULT BOXES */
 
 .goal-box {
   display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: 2px solid white;
-  border-radius: 4px;
+  min-width: 140px;
+  min-height: 90px;
+  padding: 18px 24px;
   margin: 10px auto;
-  min-width: 120px;
+  background: white;
+  border: 1px solid #ececec;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  color: #222;
+  text-align: center;
 }
 
-
-/* Buttons
-/* ========================================== */
-
-
- #numbers button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: var(--numbers-color);
-    transition: background-color 0.3s;
-  }
-/* #numbers button:hover {
-  background-color: #5671DB; 
-} */
-
-
-  .Operations button{
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 20px;
-    color:black;
-    background-color: var(--button-color);
-  }
-  /* .Operations button:hover {
-  background-color: #60DB56; 
-} */
-
-  .UndoAndReset button{
-    margin: 5px;
-    padding: 5px 20px;
-    font-size: 14px;
-    color:black;
-    background-color: var(--button-color);
-    min-width: 100px;
-  }
-
-  .UndoAndReset button:hover {
-  background-color: #60DB56; 
+.goal-box h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
-  .NextAndSkip{
-  padding: 10px 20px;
+
+#goalNumber,
+#currentResult {
+  color: #222;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+/* NUMBERS */
+
+#numbers {
+  margin: 25px auto;
+}
+
+#numbers button {
+  margin: 6px;
+  padding: 12px 22px;
+  background: var(--numbers-color);
+  color: #222;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
   font-size: 16px;
-  color: black;
-  background-color: #569BDB;
-  border: none;
-  border-radius: 4px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
-  min-width: 120px;
-  
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.NextAndSkip:hover {
-  background-color: #5671DB; 
+#numbers button:hover {
+  background: #222;
+  color: white;
+  transform: translateY(-2px);
 }
 
-.errorMessage{
-  color:rgb(174, 38, 38);
+/* OPERATION BUTTONS */
+
+button {
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.number-btn.selected { outline: 3px solid #fff; filter: brightness(0.9); }
+.Operations {
+  margin: 20px 0 12px;
+}
+
+#plus,
+#minus,
+#multiply,
+#divide {
+  margin: 6px;
+  padding: 12px 22px;
+  min-width: 55px;
+  background: #222;
+  color: white;
+  font-size: 20px;
+}
+
+#plus:hover,
+#minus:hover,
+#multiply:hover,
+#divide:hover {
+  background: #444;
+  transform: translateY(-2px);
+}
+
+.UndoAndReset {
+  margin: 12px 0;
+}
+
+#undo,
+#reset {
+  margin: 8px;
+  padding: 10px 22px;
+  background: white;
+  color: #222;
+  border: 1px solid #dcdcdc;
+  font-size: 14px;
+}
+
+#undo:hover,
+#reset:hover {
+  background: #222;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* SUBMIT / MODAL BUTTONS */
+
+.countdown-primary-btn,
+.countdown-secondary-btn {
+  margin: 8px;
+  padding: 10px 22px;
+  background: #222;
+  color: white !important;
+  border: 1px solid #222;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.countdown-secondary-btn {
+  background: white;
+  color: #222 !important;
+  border: 1px solid #dcdcdc;
+}
+
+.countdown-primary-btn:hover,
+.countdown-secondary-btn:hover {
+  background: #444;
+  color: white !important;
+  transform: translateY(-2px);
+}
+
+/* FEEDBACK */
+
+#errorMsg,
+.errorMessage {
+  color: rgb(174, 38, 38);
+  font-weight: 500;
+  margin: 12px;
+}
+
+#score,
+#round,
+#timer,
+#solveExp {
+  color: #333;
+  font-weight: 500;
+}
+
+#solveExp {
+  margin-top: 15px;
+  font-size: 15px;
+}
+
+/* SELECTED STATES */
+
+.number-btn.selected {
+  outline: 3px solid #222;
+  background: #222 !important;
+  color: white !important;
+}
+
 .operator-btn.selected {
-  background-color: #ffeb3b; /* yellow highlight */
-  outline: 2px solid #333;   /* visible focus */
+  background: #ffeb3b !important;
+  color: #222 !important;
+  outline: 2px solid #333;
+}
+
+/* MODALS */
+
+.countdown-modal .modal-content {
+  text-align: center;
+  padding: 28px 24px;
+  border: 1px solid #ececec;
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+}
+
+.countdown-modal h2 {
+  color: #222;
+  letter-spacing: 0.12rem;
+}
+
+.countdown-modal p {
+  color: #777;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+/* SUMMARY TABLE */
+
+#summaryTableContainer {
+  margin-top: 10px;
+  display: none;
+  text-align: left;
+  max-height: 250px;
+  overflow: auto;
+}
+
+#summaryTable {
+  background: white;
+  color: #333;
+}
+
+#summaryTable th,
+#summaryTable td {
+  color: #333;
+}
+
+/* DIVIDERS */
+
+hr {
+  width: 70%;
+  max-width: 600px;
+  border: none;
+  border-top: 1px solid #ececec;
+  margin: 25px auto;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2 {
+    font-size: 0.85rem;
+  }
+
+  h3 {
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+
+  .countdown-card {
+    width: calc(100% - 24px);
+    padding: 25px 15px;
+    margin: 25px auto 60px;
+  }
+
+  .countdown-targets .col-xs-6 {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  #numbers button,
+  #plus,
+  #minus,
+  #multiply,
+  #divide {
+    padding: 10px 16px;
+  }
+
+  .goal-box {
+    width: 100%;
+    max-width: 260px;
+  }
+
+  #goalNumber,
+  #currentResult {
+    font-size: 22px;
+  }
 }
